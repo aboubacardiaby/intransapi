@@ -3,14 +3,14 @@ steps:
     args:
       - build     
       - '-t'
-      - '$_GCR_HOSTNAME/$PROJECT_ID/$_AR_REPO/$_SERVICE_NAME:$COMMIT_SHA'
+      - '$_GCR_HOSTNAME/$PROJECT_ID/$_AR_REPO:$COMMIT_SHA'
       - .    
     id: Build
 
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - '$_GCR_HOSTNAME/$PROJECT_ID/$_AR_REPO/$_SERVICE_NAME:$COMMIT_SHA'
+      - '$_GCR_HOSTNAME/$PROJECT_ID/$_AR_REPO:$COMMIT_SHA'
     id: Push
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
@@ -19,7 +19,7 @@ steps:
       - deploy
       - $_SERVICE_NAME
       - '--image'
-      - '$_GCR_HOSTNAME/$PROJECT_ID/$_AR_REPO/$_SERVICE_NAME:$COMMIT_SHA'
+      - '$_GCR_HOSTNAME/$PROJECT_ID/$_AR_REPO:$COMMIT_SHA'
       - '--region'
       - $_DEPLOY_REGION
     entrypoint: gcloud
@@ -27,7 +27,7 @@ steps:
 
 timeout: 1200s
 images:
-  - '$_GCR_HOSTNAME/$PROJECT_ID/$_AR_REPO/$_SERVICE_NAME:$COMMIT_SHA'
+  - '$_GCR_HOSTNAME/$PROJECT_ID/$_AR_REPO:$COMMIT_SHA'
 
 # Options to handle logging and service account configuration
 options:
