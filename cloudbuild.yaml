@@ -1,13 +1,10 @@
 steps:
   - name: gcr.io/cloud-builders/docker
     args:
-      - build
-      - '--no-cache'
+      - build     
       - '-t'
       - '$_GCR_HOSTNAME/$PROJECT_ID/$_AR_REPO/$_SERVICE_NAME:$COMMIT_SHA'
-      - .
-      - '-f'
-      - Dockerfile
+      - .    
     id: Build
 
   - name: gcr.io/cloud-builders/docker
