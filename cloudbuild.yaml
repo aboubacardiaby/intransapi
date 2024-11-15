@@ -1,4 +1,4 @@
-﻿steps:
+steps:
   - name: gcr.io/cloud-builders/docker
     args:
       - build
@@ -9,11 +9,13 @@
       - '-f'
       - Dockerfile
     id: Build
+
   - name: gcr.io/cloud-builders/docker
     args:
       - push
       - '$_GCR_HOSTNAME/$PROJECT_ID/$_AR_REPO/$_SERVICE_NAME:$COMMIT_SHA'
     id: Push
+
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
     args:
       - run
@@ -25,6 +27,18 @@
       - $_DEPLOY_REGION
     entrypoint: gcloud
     id: Deploy
+
 timeout: 1200s
 images:
   - '$_GCR_HOSTNAME/$PROJECT_ID/$_AR_REPO/$_SERVICE_NAME:$COMMIT_SHA'
+
+# Options to handle logging and service account configuration
+options:
+  logging: CLOUD_LOGGING_ONLY  # Store logs in Cloud Logging only
+  # If you prefer, you could specify a custom GCS bucket for logs, e.g.:
+  # logs_bucket: 'gs://your-logs-bucket'  
+  # If you want Cloud Build to manage logs with a regional bucket:
+  # default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET
+
+# Optionally specify the service account if required
+# service_account: 'your-service-account@your-project.iam.gserviceaccount.com'
